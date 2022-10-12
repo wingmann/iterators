@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(containers VERSION 1.0.0 LANGUAGES CXX)
+project(iterators VERSION 1.0.0 LANGUAGES CXX)
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "/std:c++20 /Wall")
