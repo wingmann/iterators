@@ -14,7 +14,7 @@
 
 #include <iterator>
 
-namespace wingmann::containers::iterators {
+namespace wingmann::iterators {
 
 template<typename T>
 class random_access_iterator {
