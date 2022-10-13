@@ -1,3 +1,14 @@
+/// @file   random_access_iterator.h
+/// @author Alexander Shavrov (alexander.shavrov@outlook.com)
+/// @brief  Random access iterator implementation.
+/// @date   2022-10-13
+///
+/// @copyright Copyright (c) 2022
+///
+/// This file is distributed under the MIT License.
+/// See LICENSE file for details.
+///
+
 #ifndef WINGMANN_ITERATORS_RANDOM_ACCESS_ITERATOR_H
 #define WINGMANN_ITERATORS_RANDOM_ACCESS_ITERATOR_H
 
@@ -5,33 +16,26 @@
 
 namespace wingmann::containers::iterators {
 
-template<typename Type>
+template<typename T>
 class random_access_iterator {
-    Type* iterator_;
-
 public:
-    // Aliases
-    using value_type        = Type;
+    // Aliases.
+    using value_type        = T;
     using reference         = value_type&;
     using pointer           = value_type*;
     using iterator_category = std::random_access_iterator_tag;
     using difference_type   = std::ptrdiff_t;
     using iterator_concept  = std::contiguous_iterator_tag;
 
-    constexpr random_access_iterator(Type* iter = nullptr) : iterator_{iter}
+private:
+    pointer iterator_;
+
+public:
+    constexpr random_access_iterator(T* iter = nullptr) : iterator_{iter}
     {
     }
 
-    constexpr auto operator<=>(const random_access_iterator&) const = default;
-    constexpr reference operator*() const noexcept
-    {
-        return *iterator_;
-    }
-
-    constexpr pointer operator->() const noexcept
-    {
-        return iterator_;
-    }
+    // Increment/decrement operators ---------------------------------------------------------------
 
     constexpr random_access_iterator& operator++() noexcept
     {
@@ -41,7 +45,8 @@ public:
 
     constexpr random_access_iterator operator++(int) noexcept
     {
-        random_access_iterator tmp(*this); ++(*this);
+        random_access_iterator tmp(*this);
+        ++(*this);
         return tmp;
     }
 
@@ -58,6 +63,8 @@ public:
         return tmp;
     }
 
+    // Additional assignment operators -------------------------------------------------------------
+
     constexpr random_access_iterator& operator+=(const difference_type other) noexcept
     {
         iterator_ += other;
@@ -68,6 +75,18 @@ public:
     {
         iterator_ -= other;
         return *this;
+    }
+
+    // Operators -----------------------------------------------------------------------------------
+
+    constexpr reference operator*() const noexcept
+    {
+        return *iterator_;
+    }
+
+    constexpr pointer operator->() const noexcept
+    {
+        return iterator_;
     }
 
     friend constexpr random_access_iterator operator+(
@@ -91,13 +110,21 @@ public:
         return first.iterator_ - other;
     }
 
-    constexpr difference_type operator-(const random_access_iterator& other) const noexcept {
+    constexpr difference_type operator-(const random_access_iterator& other) const noexcept
+    {
         return std::distance(iterator_, other.iterator_);
     }
 
-    constexpr reference operator[](std::size_t index) const {
+    // Access operators ----------------------------------------------------------------------------
+
+    constexpr reference operator[](std::size_t index) const
+    {
         return iterator_[index];
     }
+
+    // Comparison operators ------------------------------------------------------------------------
+
+    constexpr auto operator<=>(const random_access_iterator&) const = default;
 
     constexpr friend bool operator==(
         const random_access_iterator& first,
